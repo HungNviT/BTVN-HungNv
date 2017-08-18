@@ -3,6 +3,8 @@ package bases;
 import bases.physics.Physics;
 import bases.physics.PhysicsBody;
 import bases.renderers.ImageRenderer;
+import bases.renderers.Renderer;
+import touhou.enemies.Enemy;
 import touhou.players.PlayerSpell;
 
 import java.awt.*;
@@ -15,7 +17,8 @@ import java.util.Vector;
 public class GameObject {
     protected Vector2D position;
     protected Vector2D screenPosition;
-    protected ImageRenderer renderer;
+    protected Renderer renderer;
+
     protected ArrayList<GameObject> children;
     protected boolean isActive;
 
@@ -44,6 +47,16 @@ public class GameObject {
             if (gameObject.isActive)
                 gameObject.render(g2d);
         }
+    }
+
+    //tim doi tuong trong game
+    public static <T extends GameObject> T find(Class<T> clazz) {
+        for(GameObject gameObject : gameObjects) {
+            if(gameObject.isActive && gameObject.getClass().equals(clazz)) {
+                return (T) gameObject;
+            }
+        }
+        return null;
     }
 
     public static void add(GameObject gameObject) {
@@ -81,7 +94,7 @@ public class GameObject {
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.isActive = active;
     }
 
     public Vector2D getPosition() {
@@ -93,14 +106,20 @@ public class GameObject {
             this.position = position;
     }
 
-    public ImageRenderer getRenderer() {
+    public Renderer getRenderer() {
         return renderer;
     }
 
-    public void setRenderer(ImageRenderer renderer) {
+    public void setRenderer(Renderer renderer) {
         if (renderer != null)
             this.renderer = renderer;
     }
 
+    public Vector2D getScreenPosition() {
+        return screenPosition;
+    }
 
+    public ArrayList<GameObject> getChildren() {
+        return children;
+    }
 }

@@ -2,13 +2,13 @@ package touhou.players;
 
 import bases.GameObject;
 import bases.Vector2D;
+import bases.pools.GameObjectPool;
 import tklibs.SpriteUtils;
 import bases.Constraints;
 import bases.FrameCounter;
 import bases.renderers.ImageRenderer;
 import touhou.inputs.InputManager;
-
-import java.util.Vector;
+import touhou.players.spheres.PlayerSphere;
 
 /**
  * Created by huynq on 8/2/17.
@@ -27,6 +27,22 @@ public class Player extends GameObject {
         this.spellLock = false;
         this.renderer = new ImageRenderer(SpriteUtils.loadImage("assets/images/players/straight/0.png"));
         this.coolDownCounter = new FrameCounter(3);
+        addSpheres();
+    }
+
+    private void addSpheres() {
+        //tao ra 2 sphere
+        PlayerSphere leftSphere = new PlayerSphere();
+        leftSphere.getPosition().set(-20, 0);
+        leftSphere.setReverse(false);
+
+        PlayerSphere rightSphere = new PlayerSphere();
+        rightSphere.getPosition().set(20, 0);
+        rightSphere.setReverse(true);
+
+        this.children.add(leftSphere);
+        this.children.add(rightSphere);
+
     }
 
     public void setContraints(Constraints contraints) {
@@ -54,9 +70,8 @@ public class Player extends GameObject {
 
     private void castSpell() {
         if (inputManager.xPressed && !spellLock) {
-            PlayerSpell newSpell = new PlayerSpell();
+            PlayerSpell newSpell = GameObjectPool.recycle(SpellFollow.class);
             newSpell.getPosition().set(this.position.add(0, -30));
-            GameObject.add(newSpell);
 
             spellLock = true;
             coolDownCounter.reset();

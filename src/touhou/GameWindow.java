@@ -6,6 +6,7 @@ import bases.Constraints;
 import touhou.enemies.EnemySpawner;
 import touhou.inputs.InputManager;
 import touhou.players.Player;
+import touhou.players.spheres.PlayerSphere;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -33,7 +34,7 @@ public class GameWindow extends Frame {
     Player player = new Player();
     EnemySpawner enemySpawner = new EnemySpawner(); // TODO: Viec cua lop: sua thanh game object
 
-    InputManager inputManager = new InputManager();
+    InputManager inputManager = new InputManager(); //inputmanager cua ca game
 
     public GameWindow() {
         pack();
@@ -44,10 +45,16 @@ public class GameWindow extends Frame {
     }
 
     private void addPlayer() {
-        player.setInputManager(this.inputManager);
+        player.setInputManager(this.inputManager); //player cos children la playersphere
         player.setContraints(new Constraints(getInsets().top, 768, getInsets().left, 384));
         player.getPosition().set(384 / 2, 580);
 
+        for(GameObject gameObject : player.getChildren()) {
+            if(gameObject instanceof PlayerSphere) {
+                PlayerSphere playerSphere = (PlayerSphere) gameObject;
+                playerSphere.setInputManager(this.inputManager);
+            }
+        }
         GameObject.add(player);
     }
 
