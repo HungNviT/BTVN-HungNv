@@ -48,13 +48,13 @@ public class Enemy extends GameObject implements PhysicsBody {
         super.run(parentPosition);
         fly();
         shoot();
-        hitPlayer();
         castBullet();
+        hitPlayer();
 
     }
 
     private void hitPlayer() {
-        Player player = Physics.collideWith(boxCollider, Player.class);
+        Player player = Physics.collideWith(this.boxCollider, Player.class);
         if(player != null){
             player.setActive(false);
             this.isActive = false;

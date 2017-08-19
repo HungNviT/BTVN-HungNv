@@ -9,7 +9,7 @@ import java.util.Vector;
  * Created by huynq on 8/12/17.
  */
 public class Physics {
-    private static Vector<PhysicsBody> bodies = new Vector<>();
+    public static Vector<PhysicsBody> bodies = new Vector<>();
     //Enemy, EnemyBullet, PlayerSpell..
     public Enemy collideWithEnemy(BoxCollider boxCollider) {
         for(PhysicsBody body : bodies) {

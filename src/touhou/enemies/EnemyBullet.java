@@ -45,13 +45,13 @@ public class EnemyBullet extends GameObject implements PhysicsBody {
     }
 
     private void hitPlayer() {
-        Player player = Physics.collideWith(boxCollider, Player.class);
-        if(player != null){
+        Player player = Physics.collideWith(this.boxCollider, Player.class);
+        if (player != null) {
             player.setActive(false);
             this.isActive = false;
         }
-
     }
+
 
     private void deactiveIfNeeded() {
         if(this.screenPosition.y > 768){

@@ -2,11 +2,14 @@ package touhou.players;
 
 import bases.GameObject;
 import bases.Vector2D;
+import bases.physics.BoxCollider;
+import bases.physics.Physics;
 import bases.pools.GameObjectPool;
 import tklibs.SpriteUtils;
 import bases.Constraints;
 import bases.FrameCounter;
 import bases.renderers.ImageRenderer;
+import touhou.enemies.Enemy;
 import touhou.inputs.InputManager;
 import touhou.players.spheres.PlayerSphere;
 
@@ -21,12 +24,14 @@ public class Player extends GameObject {
 
     private FrameCounter coolDownCounter;
     private boolean spellLock;
+    private BoxCollider boxCollider;
 
     public Player() {
         super();
         this.spellLock = false;
         this.renderer = new ImageRenderer(SpriteUtils.loadImage("assets/images/players/straight/0.png"));
         this.coolDownCounter = new FrameCounter(3);
+        this.boxCollider = new BoxCollider(30, 30);
         addSpheres();
     }
 
@@ -67,6 +72,8 @@ public class Player extends GameObject {
 
         castSpell();
     }
+
+
 
     private void castSpell() {
         if (inputManager.xPressed && !spellLock) {

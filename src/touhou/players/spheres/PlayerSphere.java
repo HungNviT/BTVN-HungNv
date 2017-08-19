@@ -7,6 +7,7 @@ import bases.pools.GameObjectPool;
 import bases.renderers.Animation;
 import tklibs.SpriteUtils;
 import touhou.inputs.InputManager;
+import touhou.players.SpellFollow;
 
 public class PlayerSphere extends GameObject {
     Animation animation;

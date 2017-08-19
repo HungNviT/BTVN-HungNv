@@ -33,6 +33,13 @@ public class SphereSpell extends GameObject implements PhysicsBody{
         super.run(parentPosition);
         position.addUp(0, -10);
         hitEnemy();
+        deactiveIfNeeded();
+    }
+
+    private void deactiveIfNeeded() {
+        if(this.screenPosition.y < 0){
+            this.isActive = false;
+        }
     }
 
     private void hitEnemy() {
@@ -54,7 +61,7 @@ public class SphereSpell extends GameObject implements PhysicsBody{
 
     @Override
     public boolean isActive() {
-        return false;
+        return this.isActive;
     }
 
 }
