@@ -16,28 +16,32 @@ public class Animation implements Renderer {
     //reverse n >> 0 (3, 2, 1, 0)
     private FrameCounter frameCounter;
     private  int currentImageIndex;
-    private boolean reverse; //true false
-    //if(reverse == true) n >> 0 //dao nguoc
-    //if(!reverse) if(reverse == false) if(!false == true) 0 >> n
+    private boolean reverse;
+    private boolean oneTime;
+    private boolean stopped;
 
-    public Animation(int frameDelay, boolean reverse, BufferedImage... images){
+
+    public Animation(int frameDelay, boolean oneTime, boolean reverse, BufferedImage... images){
         this.frameCounter = new FrameCounter(frameDelay);
         this.images = Arrays.asList(images);
         this.currentImageIndex = 0;
+        this.oneTime =oneTime;
         this.reverse = reverse;
     }
 
     public Animation(BufferedImage... images){
-        this(12, false, images);
+        this(12,false, false, images);
     }
     @Override
     public void render(Graphics2D g2d, Vector2D position) {
-        BufferedImage image = images.get(currentImageIndex);
-        Vector2D renderPosition = position.subtract(
-                image.getWidth() / 2,
-                image.getHeight() / 2);
-        g2d.drawImage(image, (int)renderPosition.x, (int)renderPosition.y, null );
-        updateCurrentImage();
+        if(!stopped) {
+            BufferedImage image = images.get(currentImageIndex);
+            Vector2D renderPosition = position.subtract(
+                    image.getWidth() / 2,
+                    image.getHeight() / 2);
+            g2d.drawImage(image, (int) renderPosition.x, (int) renderPosition.y, null);
+            updateCurrentImage();
+        }
     }
 
     private void updateCurrentImage() {
@@ -45,13 +49,23 @@ public class Animation implements Renderer {
             frameCounter.reset();
             if(!reverse) {
                 currentImageIndex++;
-                if (currentImageIndex >= images.size()) {
-                    currentImageIndex = 0;
+                if (currentImageIndex >= images.size() - 1) {
+                    if(!oneTime) {
+                        currentImageIndex = 0;
+                    }
+                    else {
+                        stopped = true;
+                    }
                 }
-            }else {
-                currentImageIndex --;
-                if(currentImageIndex < 0){
-                    currentImageIndex = images.size() - 1;
+            } else {
+                currentImageIndex--;
+                if (currentImageIndex <= 0) {
+                    if(!oneTime) {
+                        currentImageIndex = images.size() - 1;
+                    }
+                    else {
+                        stopped = true;
+                    }
                 }
             }
         }
@@ -59,5 +73,12 @@ public class Animation implements Renderer {
 
     public void setReverse(boolean reverse) {
         this.reverse = reverse;
+    }
+    public boolean isStopped(){
+        return stopped;
+    }
+    public void reset(){
+        stopped =  false;
+        currentImageIndex = 0;
     }
 }

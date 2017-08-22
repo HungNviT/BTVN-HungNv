@@ -3,6 +3,7 @@ package bases;
 import bases.physics.BoxCollider;
 import bases.physics.Physics;
 import bases.physics.PhysicsBody;
+import bases.pools.GameObjectPool;
 import bases.renderers.ImageRenderer;
 import bases.renderers.Renderer;
 import touhou.enemies.Enemy;
@@ -22,6 +23,7 @@ public class GameObject {
 
     protected ArrayList<GameObject> children;
     protected boolean isActive;
+    protected boolean isRenewing;
 
     private static Vector<GameObject> gameObjects = new Vector<>();
     private static Vector<GameObject> newGameObjects = new Vector<>();
@@ -45,9 +47,15 @@ public class GameObject {
 
     public static void renderAll(Graphics2D g2d) {
         for (GameObject gameObject : gameObjects) {
-            if (gameObject.isActive)
+            if (gameObject.isActive && !gameObject.isRenewing)
                 gameObject.render(g2d);
         }
+    }
+    public void clearAll(){
+        gameObjects.clear();
+        newGameObjects.clear();
+        Physics.clearAll();
+        GameObjectPool.clearAll();
     }
 
     //tim doi tuong trong game
@@ -73,6 +81,7 @@ public class GameObject {
 
     public void run(Vector2D parentPosition) {
         screenPosition = parentPosition.add(position);
+        isRenewing = false;
         for (GameObject child: children) {
             if (child.isActive)
                 child.run(screenPosition);
@@ -96,6 +105,10 @@ public class GameObject {
 
     public void setActive(boolean active) {
         this.isActive = active;
+    }
+    public void reset(){
+        this.isActive = true;
+        this.isRenewing = true;
     }
 
     public Vector2D getPosition() {

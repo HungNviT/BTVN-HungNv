@@ -9,6 +9,7 @@ import tklibs.SpriteUtils;
 import bases.Vector2D;
 import bases.renderers.ImageRenderer;
 import touhou.enemies.Enemy;
+import touhou.enemies.enemyBonus.EnemyBonus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,18 +21,12 @@ public class PlayerSpell extends GameObject implements PhysicsBody {
 
     private BoxCollider boxCollider;
     private Animation animation;
+    private int damage = 1;
 
     public PlayerSpell() {
         super();
-        this.animation = new Animation(
-                1,
-                false,
-                SpriteUtils.loadImage("assets/images/player-spells/a/0.png"),
-                SpriteUtils.loadImage("assets/images/player-spells/a/1.png"),
-                SpriteUtils.loadImage("assets/images/player-spells/a/2.png"),
-                SpriteUtils.loadImage("assets/images/player-spells/a/3.png")
-        );
-        this.renderer = animation;
+
+        this.renderer = new ImageRenderer(SpriteUtils.loadImage("assets/images/player-spells/a/1.png"));
         this.boxCollider = new BoxCollider(20, 20);
         this.children.add(boxCollider);
     }
@@ -52,7 +47,14 @@ public class PlayerSpell extends GameObject implements PhysicsBody {
     private void hitEnemy() {
         Enemy enemy = Physics.collideWith(this.boxCollider,  Enemy.class);
         if (enemy != null) {
-            enemy.setActive(false);
+            enemy.getHit(damage);
+            this.isActive = false;
+        }
+    }
+    private void hitEnemyBonus(){
+        EnemyBonus enemyBonus = Physics.collideWith(this.boxCollider, EnemyBonus.class);
+        if(enemyBonus != null){
+            //enemyBonus.getHit(damage);
             this.isActive = false;
         }
     }

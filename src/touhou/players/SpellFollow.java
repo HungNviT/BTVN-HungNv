@@ -3,9 +3,10 @@ package touhou.players;
 import bases.GameObject;
 import bases.Vector2D;
 import touhou.enemies.Enemy;
+import touhou.enemies.enemyBonus.EnemyBonus;
 
 public class SpellFollow extends PlayerSpell {
-    Enemy followEnemy;
+    EnemyBonus followEnemyBonus;
     float speed = 10;
     //tim ra enemy >> mo vao GameObject find ra 1 con enemy >> luu lai con enemy
     //xac dinh duong bay den enemy tim ra
@@ -15,21 +16,21 @@ public class SpellFollow extends PlayerSpell {
     public void run(Vector2D parentPosition) {
         super.run(parentPosition);
         //tim ra 1 con enemy de duoi theo
-        if(followEnemy == null) {
+        if(followEnemyBonus == null) {
             //bay len 10px nhu PlayerSpell binh thuong
-            followEnemy = GameObject.find(Enemy.class);
+            followEnemyBonus = GameObject.find(EnemyBonus.class);
         } else {
-            if(followEnemy.isActive()) {
+            if(followEnemyBonus.isActive()) {
                 //da tim thay 1 con
                 //ko bay 10px len nhu binh tuhong nua -10 + 10 = 0
                 position.addUp(0, 10);
-                Vector2D directionToEnemy = followEnemy.getScreenPosition().subtract(this.screenPosition);
+                Vector2D directionToEnemy = followEnemyBonus.getScreenPosition().subtract(this.screenPosition);
                 //directionToEnemy vecto dung huong nhung ma sai luc
                 Vector2D velocityToEnemy = directionToEnemy.normalizeThis().multiplyThis(speed);
                 //velocityToEnemy la 1 vecto vua dung huong, vua dung luc
                 this.position.addUp(velocityToEnemy);
             } else {
-                followEnemy = GameObject.find(Enemy.class);
+                followEnemyBonus = GameObject.find(EnemyBonus.class);
             }
         }
     }

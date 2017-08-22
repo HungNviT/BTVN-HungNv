@@ -14,11 +14,13 @@ import touhou.players.SpellFollow;
 public class SphereSpell extends GameObject implements PhysicsBody{
     private BoxCollider boxCollider;
     private Animation animation;
+    private int damage = 1;
 
     public SphereSpell() {
         super();
         this.animation = new Animation(
                 7,
+                false,
                 false,
                 SpriteUtils.loadImage("assets/images/sphere-bullets/0.png"),
                 SpriteUtils.loadImage("assets/images/sphere-bullets/1.png"),
@@ -45,7 +47,7 @@ public class SphereSpell extends GameObject implements PhysicsBody{
     private void hitEnemy() {
         Enemy enemy = Physics.collideWith(boxCollider, Enemy.class);
         if(enemy != null){
-            enemy.setActive(false);
+            enemy.getHit(damage);
             this.isActive = false;
         }
     }

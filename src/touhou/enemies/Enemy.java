@@ -31,7 +31,6 @@ public class Enemy extends GameObject implements PhysicsBody {
     public Enemy() {
         super();
         this.bulletLock = false;
-        inputManager = new InputManager();
         this.animation = new Animation(
                 SpriteUtils.loadImage("assets/images/enemies/level0/blue/0.png"),
                 SpriteUtils.loadImage("assets/images/enemies/level0/blue/1.png"),
@@ -56,8 +55,8 @@ public class Enemy extends GameObject implements PhysicsBody {
     private void hitPlayer() {
         Player player = Physics.collideWith(this.boxCollider, Player.class);
         if(player != null){
-            player.setActive(false);
-            this.isActive = false;
+            player.setActive(true);
+            this.isActive = true;
         }
     }
 
@@ -88,14 +87,19 @@ public class Enemy extends GameObject implements PhysicsBody {
     private void fly() {
         position.addUp(0, SPEED);
     }
-    public void setReverse(boolean reverse){
-        this.animation.setReverse(reverse);
-    }
 
     @Override
     public BoxCollider getBoxCollider() {
         return this.boxCollider;
     }
+
+    public void getHit(int damage) {
+        //TODO : decrease HP
+        this.setActive(false);
+        EnemyExplosion enemyExplosion = GameObjectPool.recycle(EnemyExplosion.class);
+        enemyExplosion.getPosition().set(this.position);
+
     }
+}
 
 

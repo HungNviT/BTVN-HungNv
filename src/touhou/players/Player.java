@@ -4,6 +4,7 @@ import bases.GameObject;
 import bases.Vector2D;
 import bases.physics.BoxCollider;
 import bases.physics.Physics;
+import bases.physics.PhysicsBody;
 import bases.pools.GameObjectPool;
 import tklibs.SpriteUtils;
 import bases.Constraints;
@@ -16,7 +17,7 @@ import touhou.players.spheres.PlayerSphere;
 /**
  * Created by huynq on 8/2/17.
  */
-public class Player extends GameObject {
+public class Player extends GameObject implements PhysicsBody{
     private static final int SPEED = 5;
 
     private InputManager inputManager;
@@ -26,12 +27,18 @@ public class Player extends GameObject {
     private boolean spellLock;
     private BoxCollider boxCollider;
 
+    private Vector2D velocity;
+    private PlayerAnimator animator;
+
     public Player() {
         super();
         this.spellLock = false;
-        this.renderer = new ImageRenderer(SpriteUtils.loadImage("assets/images/players/straight/0.png"));
-        this.coolDownCounter = new FrameCounter(3);
+        this.animator = new PlayerAnimator();
+        this.renderer = animator;
+        this.coolDownCounter = new FrameCounter(6);
         this.boxCollider = new BoxCollider(30, 30);
+        this.velocity = new Vector2D();
+        this.children.add(boxCollider);
         addSpheres();
     }
 
@@ -57,23 +64,28 @@ public class Player extends GameObject {
     public void run(Vector2D parentPostion) {
         super.run(parentPostion);
 
-        if (inputManager.upPressed)
-            position.addUp(0, -SPEED);
-        if (inputManager.downPressed)
-            position.addUp(0, SPEED);
-        if (inputManager.leftPressed)
-            position.addUp(-SPEED, 0);
-        if (inputManager.rightPressed)
-            position.addUp(SPEED, 0);
+        velocity.set(0, 0);
 
+
+        if (inputManager.upPressed)
+            velocity.y -= SPEED;
+        if (inputManager.downPressed)
+            velocity.y += SPEED;
+        if (inputManager.leftPressed)
+            velocity.x -= SPEED;
+        if (inputManager.rightPressed)
+            velocity.x +=SPEED;
         if (constraints != null) {
             constraints.make(position);
         }
-
+        position.addUp(velocity);
+        animator.update(this);
         castSpell();
     }
 
-
+    public Vector2D getVelocity() {
+        return velocity;
+    }
 
     private void castSpell() {
         if (inputManager.xPressed && !spellLock) {
@@ -97,5 +109,9 @@ public class Player extends GameObject {
 
     public void setInputManager(InputManager inputManager) {
         this.inputManager = inputManager;
+    }
+
+    public BoxCollider getBoxCollider() {
+        return boxCollider;
     }
 }

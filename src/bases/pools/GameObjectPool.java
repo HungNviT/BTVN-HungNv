@@ -19,7 +19,7 @@ public class GameObjectPool {
             if (gameObject.getClass().equals(classz)) {
                 // getClass().equals(classz) kiem tra xem cai gameObject hien tai co phai la kieu classz k
                 if (!gameObject.isActive()) {
-                    gameObject.setActive(true);
+                    gameObject.reset();
                     return (T) gameObject;
                 }
             }
@@ -36,5 +36,8 @@ public class GameObjectPool {
             e.printStackTrace();
             return null;
         }
+    }
+    public static void clearAll(){
+        pool.clear();
     }
 }
