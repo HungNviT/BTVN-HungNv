@@ -22,7 +22,11 @@ public class Level1Scene {
         addBackground();
         addPlayer();
         addEnemyBonus();
-        //addEnemy();TODO : do in myhouse
+        addEnemy();
+    }
+
+    private void addEnemy() {
+        enemySpawner.spawn();
     }
 
     private void addEnemyBonus() {

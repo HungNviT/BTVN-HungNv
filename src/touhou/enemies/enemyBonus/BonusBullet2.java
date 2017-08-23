@@ -4,18 +4,21 @@ import bases.GameObject;
 import bases.Vector2D;
 import bases.physics.BoxCollider;
 import bases.physics.Physics;
+import bases.physics.PhysicsBody;
 import bases.renderers.ImageRenderer;
 import tklibs.SpriteUtils;
 import touhou.players.Player;
 
-public class BonusBullet2 extends GameObject {
+public class BonusBullet2 extends GameObject implements PhysicsBody {
     private BoxCollider boxCollider;
+    private float damage = 1;
 
     public BonusBullet2() {
         super();
         this.renderer = new ImageRenderer(SpriteUtils.loadImage("assets/images/players/explosions/3.png"));
         this.boxCollider = new BoxCollider(30, 30);
         this.children.add(boxCollider);
+        Physics.add(this);
     }
 
     @Override
@@ -35,7 +38,7 @@ public class BonusBullet2 extends GameObject {
     private void hitPlayer() {
         Player player = Physics.collideWith(boxCollider, Player.class);
         if(player != null){
-            player.setActive(false);
+            player.getHitPlayer(damage);
             this.isActive = false;
         }
     }

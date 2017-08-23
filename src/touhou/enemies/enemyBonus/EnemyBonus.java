@@ -6,18 +6,22 @@ import bases.GameObject;
 import bases.Vector2D;
 import bases.physics.BoxCollider;
 import bases.physics.Physics;
+import bases.physics.PhysicsBody;
 import bases.pools.GameObjectPool;
 import bases.renderers.Animation;
 import tklibs.SpriteUtils;
+import touhou.enemies.EnemyExplosion;
 import touhou.players.Player;
 
-public class EnemyBonus extends GameObject {
+public class EnemyBonus extends GameObject implements PhysicsBody {
     private float SPEED = 1;
+    private float hp =15;    //TODO : hp
     private BoxCollider boxCollider;
     private Animation animation;
     private Constraints constraints;
     private boolean bulletLock;
     private FrameCounter coolDownCounter;
+    private float damage = 1;
 
     public EnemyBonus() {
         super();
@@ -33,8 +37,9 @@ public class EnemyBonus extends GameObject {
         );
         this.boxCollider = new BoxCollider(30, 30);
         this.children.add(boxCollider);
-
+        this.renderer = animation;
         this.coolDownCounter = new FrameCounter(60);
+        Physics.add(this);
     }
 
     @Override
@@ -48,9 +53,18 @@ public class EnemyBonus extends GameObject {
     private void hitPlayer() {
         Player player = Physics.collideWith(boxCollider, Player.class);
         if(player != null){
-            player.setActive(false);
-            this.isActive = false;
+                player.getHitPlayer(damage);
+                this.isActive = false;
         }
+    }
+
+    public void getHit(float damage) {
+        this.hp -= damage;
+        if(hp == 0) {
+            this.setActive(false);
+        }
+        EnemyExplosion enemyExplosion = GameObjectPool.recycle(EnemyExplosion.class);
+        enemyExplosion.getPosition().set(this.position);
     }
 
     private void castBullet() {
@@ -70,6 +84,7 @@ public class EnemyBonus extends GameObject {
             coolDownCounter.reset();
         }
         unLockBullet();
+
 
     }
 
@@ -109,5 +124,10 @@ public class EnemyBonus extends GameObject {
     }
     public void setConstraints(Constraints constraints){
         this.constraints = constraints;
+    }
+
+    @Override
+    public BoxCollider getBoxCollider() {
+        return boxCollider;
     }
 }

@@ -1,6 +1,7 @@
 package touhou;
 
 import bases.GameObject;
+import touhou.enemies.EnemySpawner;
 import touhou.inputs.InputManager;
 import touhou.scenes.Level1Scene;
 import touhou.settings.Settings;
@@ -29,6 +30,7 @@ public class GameWindow extends Frame {
 
 
     InputManager inputManager = InputManager.instance; //inputmanager cua ca game
+    EnemySpawner enemySpawner = new EnemySpawner();
     Level1Scene level1Scene;
 
     public GameWindow() {
@@ -94,6 +96,7 @@ public class GameWindow extends Frame {
             currentTime = System.nanoTime();
             if (currentTime - lastTimeUpdate > 17000000) {
                 run();
+                enemySpawner.spawn();
                 render();
                 lastTimeUpdate = currentTime;
             }

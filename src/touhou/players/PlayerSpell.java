@@ -20,7 +20,6 @@ import java.awt.*;
 public class PlayerSpell extends GameObject implements PhysicsBody {
 
     private BoxCollider boxCollider;
-    private Animation animation;
     private int damage = 1;
 
     public PlayerSpell() {
@@ -50,16 +49,14 @@ public class PlayerSpell extends GameObject implements PhysicsBody {
             enemy.getHit(damage);
             this.isActive = false;
         }
+        hitEnemyBonus();
     }
     private void hitEnemyBonus(){
         EnemyBonus enemyBonus = Physics.collideWith(this.boxCollider, EnemyBonus.class);
         if(enemyBonus != null){
-            //enemyBonus.getHit(damage);
+            enemyBonus.getHit(damage);
             this.isActive = false;
         }
-    }
-    public void setReverse(boolean reverse){
-        this.animation.setReverse(reverse);
     }
     @Override
     public BoxCollider getBoxCollider() {

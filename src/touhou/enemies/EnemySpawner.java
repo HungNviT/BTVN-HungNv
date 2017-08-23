@@ -13,7 +13,7 @@ import java.util.Vector;
 /**
  * Created by huynq on 8/9/17.
  */
-public class EnemySpawner extends GameObject{
+public class EnemySpawner extends GameObject {
     private FrameCounter spawnCounter;
     private Random random;
 

@@ -4,13 +4,17 @@ import bases.GameObject;
 import bases.Vector2D;
 import bases.physics.BoxCollider;
 import bases.physics.Physics;
+import bases.physics.PhysicsBody;
+import bases.pools.GameObjectPool;
 import bases.renderers.Animation;
 import tklibs.SpriteUtils;
+import touhou.enemies.EnemyExplosion;
 import touhou.players.Player;
 
-public class BonusBullet1 extends GameObject {
+public class BonusBullet1 extends GameObject implements PhysicsBody {
     private BoxCollider boxCollider;
     private Animation animation;
+    private float damage = 1;
 
     public BonusBullet1() {
         super();
@@ -23,9 +27,11 @@ public class BonusBullet1 extends GameObject {
                 SpriteUtils.loadImage("assets/images/enemies/bullets/white.png"),
                 SpriteUtils.loadImage("assets/images/enemies/bullets/yellow.png")
         );
-        this.renderer = animation;
+
         this. boxCollider = new BoxCollider(10, 10);
         this.children.add(boxCollider);
+        this.renderer = animation;
+        Physics.add(this);
     }
 
     @Override
@@ -44,13 +50,14 @@ public class BonusBullet1 extends GameObject {
 
     private void hitPlayer() {
         Player player = Physics.collideWith(boxCollider, Player.class);
-        if(player != null){
-            player.setActive(false);
-            this.isActive = false;
+        if(player != null)
+                player.getHitPlayer(damage);
+                this.isActive = false;
         }
-    }
 
+    @Override
     public BoxCollider getBoxCollider() {
         return boxCollider;
     }
 }
+

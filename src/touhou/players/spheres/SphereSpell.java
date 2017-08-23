@@ -9,6 +9,7 @@ import bases.pools.GameObjectPool;
 import bases.renderers.Animation;
 import tklibs.SpriteUtils;
 import touhou.enemies.Enemy;
+import touhou.enemies.enemyBonus.EnemyBonus;
 import touhou.players.SpellFollow;
 
 public class SphereSpell extends GameObject implements PhysicsBody{
@@ -48,6 +49,15 @@ public class SphereSpell extends GameObject implements PhysicsBody{
         Enemy enemy = Physics.collideWith(boxCollider, Enemy.class);
         if(enemy != null){
             enemy.getHit(damage);
+            this.isActive = false;
+        }
+        hitEnemyBonus();
+    }
+
+    private void hitEnemyBonus() {
+        EnemyBonus enemyBonus = Physics.collideWith(boxCollider, EnemyBonus.class);
+        if(enemyBonus != null){
+            enemyBonus.getHit(damage);
             this.isActive = false;
         }
     }

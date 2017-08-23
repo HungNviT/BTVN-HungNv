@@ -11,6 +11,7 @@ import bases.Constraints;
 import bases.FrameCounter;
 import bases.renderers.ImageRenderer;
 import touhou.enemies.Enemy;
+import touhou.enemies.EnemyExplosion;
 import touhou.inputs.InputManager;
 import touhou.players.spheres.PlayerSphere;
 
@@ -29,6 +30,7 @@ public class Player extends GameObject implements PhysicsBody{
 
     private Vector2D velocity;
     private PlayerAnimator animator;
+    private float hp = 10;
 
     public Player() {
         super();
@@ -55,6 +57,14 @@ public class Player extends GameObject implements PhysicsBody{
         this.children.add(leftSphere);
         this.children.add(rightSphere);
 
+    }
+    public void getHitPlayer(float damage){
+        this.hp -= damage;
+        if(hp == 0){
+            this.isActive = false;
+        }
+        EnemyExplosion enemyExplosion = GameObjectPool.recycle(EnemyExplosion.class);
+        enemyExplosion.getPosition().set(this.position);
     }
 
     public void setContraints(Constraints contraints) {

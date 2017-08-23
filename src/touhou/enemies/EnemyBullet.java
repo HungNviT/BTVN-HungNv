@@ -17,6 +17,7 @@ public class EnemyBullet extends GameObject implements PhysicsBody {
 
     private BoxCollider boxCollider;
     private Animation animation;
+    private float damage = 1;
 
     public EnemyBullet() {
         super();
@@ -48,7 +49,7 @@ public class EnemyBullet extends GameObject implements PhysicsBody {
     private void hitPlayer() {
         Player player = Physics.collideWith(this.boxCollider, Player.class);
         if (player != null) {
-            player.setActive(false);
+            player.getHitPlayer(damage);
             this.isActive = false;
         }
     }

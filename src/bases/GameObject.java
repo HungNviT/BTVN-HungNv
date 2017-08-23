@@ -7,6 +7,7 @@ import bases.pools.GameObjectPool;
 import bases.renderers.ImageRenderer;
 import bases.renderers.Renderer;
 import touhou.enemies.Enemy;
+import touhou.enemies.EnemySpawner;
 import touhou.players.PlayerSpell;
 
 import java.awt.*;
@@ -24,6 +25,7 @@ public class GameObject {
     protected ArrayList<GameObject> children;
     protected boolean isActive;
     protected boolean isRenewing;
+
 
     private static Vector<GameObject> gameObjects = new Vector<>();
     private static Vector<GameObject> newGameObjects = new Vector<>();

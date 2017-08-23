@@ -21,12 +21,13 @@ import java.util.ArrayList;
  * Created by huynq on 8/9/17.
  */
 public class Enemy extends GameObject implements PhysicsBody {
-    private static final float SPEED = 1;
+    private static final float SPEED = 3;
     private BoxCollider boxCollider;
     private boolean bulletLock;
     private FrameCounter coolDownCounter;
     private Animation animation;
     private InputManager inputManager;
+    private float damage = 1;
 
     public Enemy() {
         super();
@@ -55,7 +56,7 @@ public class Enemy extends GameObject implements PhysicsBody {
     private void hitPlayer() {
         Player player = Physics.collideWith(this.boxCollider, Player.class);
         if(player != null){
-            player.setActive(true);
+            player.getHitPlayer(damage);
             this.isActive = true;
         }
     }
